@@ -1,38 +1,30 @@
 package fr.antennes.mbds.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/customers")
 @RestController
 public class CustomerController {
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerRepository customerRepository)
+    public CustomerController(CustomerService customerService)
     {
-        this.customerRepository = customerRepository;
+        this.customerService = customerService;
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id)
+    public CustomerDto getCustomerById(@PathVariable Long id)
     {
-        Optional<Customer> customerOptional = customerRepository.findById(id);
-//        if (customerOptional.isPresent())
-//            return ResponseEntity.ok(customerOptional.get());
-//        return ResponseEntity.notFound().build();
-        return customerOptional.orElse(null);
+        return customerService.findById(id);
     }
 
     @GetMapping
-    public List<Customer> getCustomers()
+    public List<CustomerDto> getCustomers()
     {
-        return customerRepository.findAll();
+        return customerService.findAll();
     }
 }
